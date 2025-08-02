@@ -1,22 +1,41 @@
-<% @entries.each do |e| %>
-  <% if @myUserId != e.user.id %>
-    <h2><%= e.user.name %>さんとのトークルーム</h2>
-  <% end %>
-<% end %>
+<div class="cover-rooms-show">
+    <div class="container d-flex flex-column align-items-center">
+      <div class="row mt-5">
 
-<%= link_to "ユーザー一覧に戻る", users_path %>
+      <% @entries.each do |e| %>
+        <% if @myUserId != e.user.id %>
+          <h1 class="font-weight-normal text-center" style="font-family: sans-serif;"><span class="text-primary"><%= e.user.name %>さん</span>とのトークルーム</h1>
+        <% end %>
+      <% end %>
 
-<% if @messages.present? %>
-  <% @messages.each do |m| %>
-    <% if @myUserId == m.user.id %>
-      <p><%= m.user.name %></p>
-      <p><%= m.message %></p>
-    <% end %>
-  <% end %>
-<% end %>
+    <div class="d-flex flex-column w-100 mt-3 mx-auto mb-3 card profile">
+      <% if @messages.present? %>
+        <% @messages.each do |m| %>
+          <% if @myUserId == m.user.id %>
+           <div class="d-flex justify-content-end">
+            <div class="card border-0 mb-2 p-2 text-dark" style="max-width: 70%; background-color: #d4edda;">
+            <p class="mb-0"><%= m.message %></p>
+            </div>
+           </div>
+          <% else %>
+            <div class="d-flex justify-content-start">
+             <div class="card border-0 mb-2 p-2 text-dark" style="max-width: 70%; background-color: #fce4ec;">
+              <p class="mb-0"><%= m.message %></p>
+             </div>
+           </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+    
+    <div class="message-form-wrapper">
+      <%= form_for @message do |f| %>
+        <%= f.text_field :message, placeholder: "メッセージを入力して下さい", size: 50, class: "form-text-field" %>
+        <%= f.hidden_field :room_id, value: @room.id %>
+        <%= f.submit "送信する", class: 'form-submit' %>
+      <% end %>
+    </div>
 
-<%= form_for @message do |f| %>
-  <%= f.text_field :message, placeholder: "メッセージを入力して下さい", size: 50, class: "form-text-field" %>
-  <%= f.hidden_field :room_id, value: @room.id %>
-  <%= f.submit "投稿", class: 'form-submit' %>
-<% end %>
+    </div>
+  </div>
+</div>

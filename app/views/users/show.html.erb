@@ -4,12 +4,13 @@
       <% if user_signed_in? && @user == current_user %>
         <h1 class="font-weight-normal">マイページ</h1>
       <% else %>
-        <h1 class="font-weight-normal"><%= @user.name %>さんのページ</h1>
+        <h1 class="font-weight-normal text-center"><%= @user.name %>さんのページ</h1>
       <% end %>
       <% unless @user.id == current_user.id %>
         <% if (current_user.following? @user) && (@user.following? current_user)  %>
+        <div class="w-100 d-flex justify-content-center">
         <% if @isRoom == true %>
-          <p class="user-show-room"><a href="/rooms/<%= @roomId %>" class="btn btn-primary btn-lg">チャットへ</a>
+          <p class="user-show-room"><a href="/rooms/<%= @roomId %>" class="btn btn-primary btn-lg">チャットを始める</a>
         <% else %>
           <%= form_for @room do |f| %>
             <%= fields_for @entry do |e| %>
@@ -17,6 +18,7 @@
           <% end %>
           <%= f.submit "チャットを始める", class:"btn btn-primary btn-lg user-show-chat"%>
         <% end %>
+        </div>
      <% end %>
     <% end %>
 <% end %>
@@ -28,11 +30,11 @@
     <% end %>
     <% if current_user != @user %>
         <% if current_user.following?(@user) %>
-            <p class="d-flex align-self-end">
+            <p class="d-flex justify-content-end w-100">
                 <%= link_to 'フォロー外す', user_relationships_path(@user.id),  data: { turbo_method: :delete }, class: "btn btn-danger" %>
             </p>
             <% else %> 
-            <p class="d-flex align-self-end">
+            <p class="d-flex justify-content-end w-100">
                 <%= link_to 'フォローする', user_relationships_path(@user.id), data: { turbo_method: :post }, class: "btn btn-success" %>
             </p>
         <% end %>
@@ -41,7 +43,7 @@
       <%= attachment_image_tag @user, :profile_image, size: '100x100', fallback: "no_image.svg", class: "mb-3 profile-img" %>
       <h4 class="ml-3 mb-3 card w-100 profile"><%= @user.profile %></h4>
     </div>
-    <div class="d-flex">
+    <div class="d-flex justify-content-center">
         <%= link_to follows_user_path(@user) do %>
             <h6>フォロー<%= @following_users.count %> </h6>
         <% end %>
